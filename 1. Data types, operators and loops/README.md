@@ -1,6 +1,6 @@
 # Data types
 
-Starting with the basics, so far the **data types** we use will be mostly the same as in C; **Data types** are split into 3 groups, `Basic data types`, `Derived data types` and `User defined data types`;
+Starting with the basics, so far the **data types** we use will mostly be the same as in C; **Data types** are split into 3 groups, `Basic data types`, `Derived data types` and `User defined data types`;
 
 ## Basic data types
 
@@ -17,7 +17,7 @@ These are the same as in C, we have:
 - `bool` - for `true`/`false` values, this is the first difference compared to C, since in C bool didn't exist as an explicit **data type**
 - `void` - for when the value is uncertain (could be anything, could be nothing, used mainly for `pointers` and function as a return type)
 
-\* `long int` and `int` depend on system structure, for example, on windows long int will be `32-bit` for compatability reasons, while on linux it will be `64-bit`; Mostly unimportant information :) (if you want to check the size of some variable, there is a builtin operator `typeof(*type*)` that can help you)
+\* `long int` and `int` depend on system structure, for example, on windows `long int` will be `32-bit` for compatability reasons, while on linux it will be `64-bit`; Mostly unimportant information :) (if you want to check the size of some variable, there is a builtin operator `typeof(*type*)` that can help you)
 
 ## Derived data types
 
@@ -112,5 +112,7 @@ Simpler version of the table:
 |**A1**            |**px**         |**A0**                      |
 |**A2**            |**ppx**        |**A1**                      |
 
-So far this seems very pointless, because we still haven't covered functions and the `*` operator; The **dereference operator**, or the **value of** operator, or the `*` operator takes an address, goes into memory, and comes back with the value stored at that address;
+So far this seems very pointless, because we still haven't covered functions and the `*` operator; 
+
+The **dereference operator**, or the **value of** operator, or the `*` operator takes an address, goes into memory, and comes back with the value stored at that address;
 

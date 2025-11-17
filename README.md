@@ -1,6 +1,6 @@
 # cpp-learning
-This is a github repo where I am going to be putting all files I use to learn and practice c++ in order to help anyone studying OOP on ftn;
+This is a github repo where I am going to be putting all the material I used for learning so it can serve as a guid to people also studying OOP on FTN;
 
-The whole "guide" will be written in english since I don't believe in coding on Serbian :);
+I will be writing in english since I don't believe in coding in Serbian :);
 
-Each folder will represent a learning group/level and i'll try to follow at the same pace as the teaching; 
+The files will be organized into groups by level and I will try to follow the pace of the proffessor;
