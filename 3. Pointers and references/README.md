@@ -1,8 +1,10 @@
 ## Pointers and references
 
+### Pointers
+
 (note: I am currently unable to make a valid visual representation of pointers so I highly encourage you to find an image online, I will make one when I have the time;)
 
-`Pointers` are variables used for storing addresses - memory locations of other variables or stack allocated values; They themselves are variables, which means they also take some space in memory, how much depends on the system; On a `32-bit` system `pointers` are `32-bits` and on `64-bit` systems they are `64-bits`; Rather self explanitory;
+`Pointers` are variables used for storing addresses - memory locations of other variables or heap allocated values; They themselves are variables, which means they also take some space in memory, how much depends on the system; On a `32-bit` system `pointers` are `32-bits` and on `64-bit` systems they are `64-bits`; Rather self explanitory;
 
 This means that it is **possible**, and often **required** to have `pointers` that point to other `pointers`;
 
@@ -74,3 +76,75 @@ cout << *px << endl; // 15
 cout << *ppx << endl; // &x
 cout << **ppx << endl; // 15
 ```
+
+All of this will come in a lot handier when we talk about functions and classes;
+
+#### Void Pointers
+
+A void pointer can `reference` any object in memory, but before getting `dereferenced`, it neets to get `cast` into the correct type; Example:
+
+```cpp
+int x = 353;
+void *vp = &x;
+
+cout << *vp << endl; // compile error
+
+cout << *(int*)vp << endl; // the pointer is cast into an int pointer, and then dereferenced to get the value
+
+cout << *(char*)vp << endl; // this is also possible 
+```
+
+We use `void pointers` when we want to have multiple different value types referenced by the same pointer, but we have to keep track of what type we need to cast it to afterwards;
+
+In the previous example, the output is `353` followed by the letter `a`. **Why?** If we look at the binary representation of the number `353` we can see that it is `0001 0110 0001`, meaning its bigger than `1 byte` and 1 byte is the `size of char`; This means that when we `cast` `vp` to a char pointer, it only took the lower 8 bits of the number, and evaluated them to `97`, which in the ascii table is the value for the letter `a`;
+
+### References
+
+We've seen `pointers` and the alternate ways we can access the value of a variable, `references` help with the same thing but are much simpler to use (and a lot more restricted);
+
+Where as `pointers` are a variable designed for holding a special kind of value - an address, references aren't a variable, they are an `alias`, a different way to name your variable;
+
+```cpp
+int a = 67;
+int &ra = a;
+int &rra = ra;
+
+cout << a << "\t" << ra << "\t" << rra << endl;
+cout << &a << "\t" << &ra << "\t" << &rra << endl;
+```
+
+Output:
+
+```
+67      67      67
+0x7fffc87039d4  0x7fffc87039d4  0x7fffc87039d4
+```
+
+Here we can see that `ra` and `rra` have the same value and the same address as `a`; This means that unlike how we could have a `pointer to a pointer`, we can't have a `reference of a reference`, since they require a base memory location to begin with;
+
+Couple of major differences include how we need to provide a value for the reference at the time of its creation, while a pointer can remain declared and not initialized; Pointers can also be re-assigned a value, while references can't; Example
+
+```cpp
+int a1 = 10, a2 = 15;
+int *pa; // uninitialized
+
+pa = &a1; // gets the address of a1
+pa = &a2; // gets the address of a2
+
+int b1 = 10, b2 = 15;
+int &rb; // compile error
+
+int &rb = b1; // references b1
+rb = b2; // puts the value of b2 into b1 (b1 becomes 15)
+```
+
+If we come back to the table we made for the pointers, we can see how references behave:
+
+
+|memory address    |code identifier|value stored at the location|
+|:---:             |:---:          |:---:                       |
+|**0x7ffda9d54b94**|**x, rx, rrx** |**67**                      |
+
+We just made new identifiers for the same object in memory, compared to making new objects in memory;
+
+References behave a little differently in functions, we'll see that;

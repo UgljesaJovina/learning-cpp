@@ -1,8 +1,10 @@
-# Data types
+# Data types, operators and loops
+
+## Data types
 
 Starting with the basics, so far the **data types** we use will mostly be the same as in C; **Data types** are split into 3 groups, `Basic data types`, `Derived data types` and `User defined data types`;
 
-## Basic data types
+### Basic data types
 
 These are the same as in C, we have:
 
@@ -19,17 +21,17 @@ These are the same as in C, we have:
 
 \* `long int` and `int` depend on system structure, for example, on windows `long int` will be `32-bit` for compatability reasons, while on linux it will be `64-bit`; Mostly unimportant information :) (if you want to check the size of some variable, there is a builtin operator `typeof(*type*)` that can help you)
 
-## Derived data types
+### Derived data types
 
 We have:
 
 - `arrays` - continuous blocks of data
 - `pointers` - special variables that store the address of a certain data type
-- `references` - similar to `pointers` but also very different, explained here<sup>[[1](#pointers-and-references)]</sup>
+- `references` - similar to `pointers` but also very different, explained [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references)
 - `functions` - for reusable code blocks
 - `strings` - part of the standard library (`std::string`) very often used when working with `strings`, compared to the C-style `char[]`
 
-## User defined data types
+### User defined data types
 
 We have:
 
@@ -39,7 +41,7 @@ We have:
 - `typedef` - same as C, provides an alias for a different data type
 - `using` - for user defined `namespace's`, don't think its classifyable as its own data type, but yeah
 
-## Usage
+### Usage
 
 We use data types to declare variables - named adresses in our program that we can use to fetch data out of memory;
 
@@ -242,5 +244,43 @@ If we were to use a normal while loop, there wouldn't even be an output since th
 - `for` - the for loop is most commonly used, but its syntax is basically just synthetic sugar for a while loop; Syntax:
 
 ```cpp
+for (*before the loop*; condition; *after each iteration*) {
+    // code block...
+}
+```
+
+In a while loop, we had to define a counter variable before entering the `loop` (in our case `x`) and then had to change that variable in some way on each `iteration` of the `loop` to stop it from going `infinite`; The for loop is basically the same, except it is all contained within the parenthesis for the loop definition; Example:
+
+```cpp
+int n = 10;
+for (int i = 0; i < n; i++) {
+    cout << "The current value of i is: " << i << endl;
+}
+```
+
+The output is:
 
 ```
+The current value of i is: 0
+The current value of i is: 1
+...
+The current value of i is: 9
+```
+
+This is the same as what we had with the `while loop`; We can see the simillarities even closer if i were to write the loop like this:
+
+```cpp
+int n = 10, i = 0;
+for (; i < n; ) {
+    cout << "The current value of i is: " << i << endl;
+    i++;
+}
+```
+
+Here we can notice the for loop can exist with only the condition part of the definition; The `int i = 0` could have been replaced with any statement that we want to run before the first iteration of the loop; The `i++` could have been replaced with anything we want to run after each iteration of the loop; For example:
+
+```cpp
+for (int n = 10, i = 0; i < n; cout << i << endl, i++) { }
+```
+
+This will write numbers `from 0 to 9` without us having put anything in the body of the `for loop`;
