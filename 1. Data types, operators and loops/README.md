@@ -25,7 +25,7 @@ These are the same as in C, we have:
 
 We have:
 
-- `arrays` - continuous blocks of data
+- `arrays` - continuous blocks of data, you can find more [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references#arrays)
 - `pointers` - special variables that store the address of a certain data type
 - `references` - similar to `pointers` but also very different, explained [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references)
 - `functions` - for reusable code blocks

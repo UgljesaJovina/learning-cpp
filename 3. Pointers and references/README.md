@@ -1,6 +1,6 @@
-## Pointers and references
+# Pointers and references
 
-### Pointers
+## Pointers
 
 (note: I am currently unable to make a valid visual representation of pointers so I highly encourage you to find an image online, I will make one when I have the time;)
 
@@ -77,9 +77,27 @@ cout << *ppx << endl; // &x
 cout << **ppx << endl; // 15
 ```
 
-All of this will come in a lot handier when we talk about functions and classes;
+All of this will come in a lot handier when we talk about functions and classes; 
 
-#### Void Pointers
+Example of pointer usage:
+
+```cpp
+int a = 15;
+
+int *pa = &a;
+
+*pa = 64; // sets the value of a
+
+int b = *pa; // gets the value of a through pa
+
+a = 33;
+
+cout << b << " " << a << " " << *pa << endl;
+```
+
+Output: `64 33 33`
+
+### Void Pointers
 
 A void pointer can `reference` any object in memory, but before getting `dereferenced`, it neets to get `cast` into the correct type; Example:
 
@@ -98,7 +116,7 @@ We use `void pointers` when we want to have multiple different value types refer
 
 In the previous example, the output is `353` followed by the letter `a`. **Why?** If we look at the binary representation of the number `353` we can see that it is `0001 0110 0001`, meaning its bigger than `1 byte` and 1 byte is the `size of char`; This means that when we `cast` `vp` to a char pointer, it only took the lower 8 bits of the number, and evaluated them to `97`, which in the ascii table is the value for the letter `a`;
 
-### References
+## References
 
 We've seen `pointers` and the alternate ways we can access the value of a variable, `references` help with the same thing but are much simpler to use (and a lot more restricted);
 
@@ -148,3 +166,69 @@ If we come back to the table we made for the pointers, we can see how references
 We just made new identifiers for the same object in memory, compared to making new objects in memory;
 
 References behave a little differently in functions, we'll see that;
+
+## Arrays
+
+Same as C, an array is a continuous block of data made to hold multiple values inside a single variable; An array under the hood is just a pointer pointing to the address of the first element in the array; That address can then be offset by `n` bytes to get all the other values; 
+
+Syntax: `T var_name[n] = { initial_values }` - `T` is the data type of the elements in the array, `n` is the max amount of elements that can be stored inside this array and `initial_values` is a list of comma seperated values that will be used as the initial values for the array; If we set `initial_values`, `n` doesn't need to be set, but if we don't `n` is required;
+
+Example:
+
+```cpp
+int arr[5] = { 1, 2, 3 };
+int val = 15;
+```
+
+This will initialize the array with **5** slots, where the first **3** are `1, 2, 3` and the last **2** are `0`;
+
+|memory address    |code identifier|value stored at the location|
+|:---:             |:---:          |:---:                       |
+|**A0 + 0**        |**arr[0]**     |**1**                       |
+|**A0 + 4**        |**arr[1]**     |**2**                       |
+|**A0 + 8**        |**arr[2]**     |**3**                       |
+|**A0 + 12**       |**arr[3]**     |**0**                       |
+|**A0 + 16**       |**arr[4]**     |**0**                       |
+|**A1**            |**val**        |**15**                      |
+
+Using **zero-based** indexing, we can access every element in the array from the first (at index **0**) to the last (index **(n - 1)**); Getting the size of the array can be done using `sizeof(arr) / sizeof(T)`; `sizeof(arr)` will get the total amount of bytes the array takes, in our case that would be <br>`5 (number of elements) * 4 (size of each element) = 20 (sizeof array)`, meaning that if we divide that by `sizeof(int)` we get **5**;
+
+This is not the only way to make an array, we can also do it with the `new` keyword which will be mentioned in more detail when we come to `classes`; All the `new` keyword does is make the array get **allocated** on the **heap** instead of the **stack** (stack allocation is done like we showed previously); If an array is **stack allocated** it gets `deleted` from the memory **automatically**, while if its **heap allocated** we have to handle deallocation **manually** using the `delete` keyword; Example:
+
+```cpp
+int *arr = new int[5];
+
+arr[0] = 5;
+arr[1] = 17;
+
+for (int i = 0; i < 5; i++) {
+    cout << "The element at index i is: " << arr[i] << endl;
+}
+
+delete arr; // free up memory
+
+```
+
+If we were to change what arr points to, we would lose the reference for the values we **allocated** in **heap**, meaning we can't `delete` them afterwards; This can be devastating and lead to a common bug called a `memory leak` - when **heap allocated** space is not **deallocated** properly; For this reason, whenever we use `new` we should also have a `delete` when we stop using the variable, but more on that in `classes`;
+
+One last note, since arrays are just fancy pointers under the hood, this means we can also access each of their elements like this:
+
+```cpp
+int *arr = new int[5] { 1, 2, 3, 4, 5 };
+
+*(arr + 2) = 17; // changes the value of arr[2] to 17
+// array now looks like: 1, 2, 17, 4, 5
+
+cout << *(arr + 4) << endl; // writes 5
+```
+
+This works because `arr[i]` is just a different way to write the *"pointerized"* expression; `*(arr + 4)` works because it knows the pointer is of type `int`, meaning it is going to add `4 * sizeof(int)` to the base pointer `arr`; Had we dont something like: `*(int*)((char*)arr + 4)`, it would read out `2` - the second index in the array; Why? `(char*)arr` will cast arr to a `char pointer`, meaning that adding 4 will add `4 * sizeof(char) = 4` to the address, skiping only one integer; If we were to write this out, we wouldn't see anything since the ascii character with the value `2` doesn't have a visual representation; If instead of `2` we had `48`, output would be `0`; For this reason, before **dereferencing** the pointer, we have to cast it back to `(int*)` so it gets treated like a number, which will then write out `2`; If we were to do `*(int*)((char*)arr + 3)`, we would get `512`, because the value of `2` gets `shifted` by 8 places to the left, meaning it gets multiplied by `2^8 = 256`; Example showing everything I've yapped about here:
+
+```cpp
+int *arr = new int[5] { 1, 48, 3, 4, 5 };
+
+cout << *(arr + 4) << endl; // 5
+cout << ((char*)arr + 4) << endl; // 0
+cout << *(int*)((char*)arr + 4) << endl; // 48
+cout << *(int*)((char*)arr + 7) << endl; // 768
+```
