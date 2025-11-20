@@ -1,5 +1,5 @@
 # cpp-learning
-This is a github repo where I am going to be putting all the material I used for learning so it can serve as a guid to people also studying OOP on FTN;
+This is a github repo where I am going to be putting all the material I used for learning so it can serve as a guide to people also studying OOP on FTN;
 
 I will be writing in english since I don't believe in coding in Serbian :);
 
