@@ -107,7 +107,7 @@ a: 15,               b: 0x7ffdbccce3c4,  c: 15
 
 Notice how `b` and `&c` are the same, as well as `*b` and `c`;
 
-Passing references and pointers like this can be dangerous due to the `side effects` of changing data outside their scope; This is why we have the `const` keyword; If we look at the function definition for something like `strlen`, a function that returns the length of a string passed to it, we can see that the parameter is of type `const char *__s`; This means that the poiner is readonly => `*__s = 'a'` is not allowed and will not compile; The same can be applied to references; We will also see this with the `copy constructor` in `classes`;
+Passing references and pointers like this can be dangerous due to the `side effects` of changing data outside their scope; This is why we have the `const` keyword; If we look at the function definition for something like `strlen`, a function that returns the length of a string passed to it, we can see that the parameter type is `const char *__s`; This means that the pointer is read-only => `*__s = 'a'` is not allowed and will not compile; The same can be applied to references; We will also see this with the `copy constructor` in `classes`;
 
 ### Default parameter values
 
@@ -141,7 +141,7 @@ Function: Some string
 Main: Some string
 ```
 
-Here we made a function that can work with only one parameter, the `src`; We made it so that the function will always write an output, and if needed, we can pass a destination to the function if we want to save a copy of the written string;
+Here we made a function that can work with only one parameter, the `src`; We made it so that the function will always write an output, and if needed, we can pass a `destination` to the function if we want to save a copy of the written string;
 
 Default parameters always need to come last in the parameter list, the required parameters need to come first for the compiler to know how to parse the function call; Another example:
 
@@ -163,7 +163,7 @@ a: 5, b: 6, c: 7
 a: 8, b: 9, c: 7
 ```
 
-If we want to set just the value of `c`, we can't without setting the values for `a` and `b` first;
+If we want to set the value of just `c`, we need to set the values of `a` and `b` first;
 
 ### Function name overloading
 
@@ -197,13 +197,23 @@ Double implementation: 6
 
 Functions defined in the same scope need to differ in their signature; A function signature consists of a `function name` and a `parameter list` (number and type of parameters);
 
-This means that we can have a function `toPower` implemented as `int toPower(int x)` which would just square the number `x`, and also a `int toPower(int x, int y)` which would raise `x` to the power of `y`; I am aware this could have been done with a default value for `y` but I can't think of a better example rn;
+This means that we can have a function `toPower` implemented as `int toPower(int x)` which would just square the number `x`, and also a `int toPower(int x, int y)` which would raise `x` to the power of `y`; I am aware this could've been done with a default value for `y` but I can't think of a better example rn;
+
+```cpp
+int toPower(int x) { return x * x; }
+
+int toPower(int x, int y) {
+    if (y == 0) return 1;
+    for (int i = 1; i <= y; i++) x *= x;
+    return x;
+}
+```
 
 ## Classes, structs and unions
 
 ### Classes
 
-Classes represent a way to combine multiple simple data types into one complex type with custom `data encapsulation` logic (what can and can't be accessed); They are a way for use to design a blueprint that mimics an object we want to represent through the use of `member variables` or `fields` and `member functions` or `methods`; Visually, it looks something like:
+Classes represent a way to combine multiple simple data types into one complex type with custom `data encapsulation` logic (what can and can't be accessed); They allow us to design a blueprint that mimics an object we want to represent through the use of `member variables` (`fields`) and `member functions` (`methods`); Visually, it looks something like:
 
 <img src="class_visual.png">
 
@@ -236,25 +246,25 @@ Here, we defined 5 `member variables`, and 5 `member functions`; We can also see
 
 #### Objects
 
-Objects are `instantiated` classes; Since a class doesn't take any space in memory because it is just a blueprint, when we want to use it we need to instantiate it, meaning we have to take up memory for each `field` in the class; This means that we take up `32 bytes` for the string, `4` for `furColor` and another `4` for `eyeColour` and then `8` two times for `height` and `weight`; All in all, each `Dog` object when instantiated will require `56 bytes` of memory;
+Objects are `instantiated` classes; Since a class doesn't take any space in memory because it is just a blueprint, when we want to use it we need to instantiate it, meaning we have to take up memory for each `field` in the class; This means that we take up `32 bytes` for the string, `4` for `furColor` and another `4` for `eyeColour`, and then `8` for `height` and `8` for `weight`; All in all, each `Dog` object when instantiated will require `56 bytes` of memory;
 
 We can access data stored in an object using the `.` operator; Doing `object_name.field_name` or `object_name.method_name()` will attempt to access said field / call said function; I say attempt since `access modifiers` can restrict what we can and can't see on an object;
 
 <hr>
 
-**Access modifiers** are special tags we place inside a `class` or `struct` definition to change where they're members are visible from; `Access modifiers` include:
+**Access modifiers** are special tags we place inside a `class` or `struct`'s definitions to change where their members are visible from; `Access modifiers` include:
 
 - `private` - the default modifier for all `class` members; It restricts access of private members outside the class itself; We can see that in our `Dog` example, we are able to read the values of `private fields` **name, furColour, eyeColour, height, weight** from their respective member function, but if we tried to read their values directly from `main`, we would instead get a compilation error;
-- `public` - the default modifier for all `struct` members, also the only difference between the two; `public` fields allow for read/write permissions to anyone anywhere, and `public` methods can be called from anywhere, no restrictions;
+- `public` - the default modifier for all `struct` members; It is also the only difference between `clases` and `structs`; `public` fields allow for **read/write** permissions to anyone anywhere, and `public` methods can be called from anywhere, no restrictions;
 - `protected` - will be explained in [inheritance](#inheritance)
 
-Setting an access modifier for a field or function is done by doing `modifier_name:` on a line; After that line, every member will have said `access modifier` applied to it;
+Setting an access modifier for a field or function is done by doing `modifier_name:` on a line; After that line, every member will have that `access modifier` applied to it;
 
 <hr>
 
 **Instantiating**:
 
-Instantiating is done through a `constructor`, a special method that is called when a new `instance` of a `class` is created; It is used to set initial values for `class` fields or do custom logic when a new `instance` get made; By default, if we don't specify anything C++ provides an `empty constructor`, a constructor that takes no parameters and does nothing; Example of calling an empty constructor:
+Instantiating is done through a `constructor`, a special method that is called when a new `instance` of a `class` is created; It is used to set initial values for `class` fields or do custom logic when a new `instance` gets made; By default, if we don't specify anything, C++ provides an `empty constructor`, a constructor that takes no parameters and does nothing; Example of calling an empty constructor:
 
 ```cpp
 Dog d;
@@ -274,7 +284,7 @@ Output:
 6.95298e-310
 ```
 
-This is because `height` and `weight` currently contain any bytes that were in memory before the object got made, and then try to interpret it as a double; We can create our own empty constructor to stop this `unpredictability` from happening; A constructor can be defined using just the `class_name` followed by parenthesis that list parameters required; Example:
+This is because `height` and `weight` don't change data when they get allocated, meaning they contain the bytes that were in memory before the object got made, and then try to interpret it as a `double`; We can create our own empty `constructor` to stop this `unpredictability` from happening; A `constructor` can be defined using just the `class_name` followed by **parenthesis** that `list parameters` required; Example:
 
 ```cpp
 class Dog {
@@ -292,7 +302,7 @@ public:
 
 Writing the values of `height` and `weight` now will give us `0` and `0`;
 
-If we wanted to initialize our `Dog` with some value though, we would need to make a *"normal"* constructor, example:
+If we wanted to initialize our `Dog` with some values though, we would need to make a *"normal"* constructor, example:
 
 ```cpp
 class Dog {
@@ -311,7 +321,7 @@ public:
 };
 ```
 
-Since multiple constructors can exist for a single class, we need to make sure they differ in their `signature`, just like regular functions; Function signature consisted of a `name` and a `parameter list`, but since we don't have names for constructors, and instead just the return type, we need to make them different with the `parameter list`; This was done, since our first constructor has **0** parameters and our second has **5**; Example:
+Since multiple constructors can exist for a single class, we need to make sure they differ in their `signature`, just like regular functions; `Function signature` consisted of a `name` and a `parameter list`, but since we don't have `names` for constructors, and instead just the return type, we need to make them different with the `parameter list`; In our example, this is done through the length of the param list, first constructor having **0** parameters and the second having **5**; Example:
 
 ```cpp
 Dog d1;
@@ -342,7 +352,7 @@ Name: , fur colour: 0, eye colour: 0, height: 0, weight: 0
 Name: Brian, fur colour: 6, eye colour: 4, height: 110, weight: 50
 ```
 
-We can see how the two object hold different data, but right now there is no way to change what they have contained within themselves since we only defined `getter` functions and no `setter` functions, and all our fields are `private`;
+We can see how the two `objects` hold different data, but right now there is no way to change what they contain within themselves since we only defined `getter` functions and no `setter` functions, and all our fields are `private`;
 
 `Setter functions` for our dog would look something like:
 
@@ -388,7 +398,9 @@ Now for the issues; Firstly, we can't have function overloads where one is `pass
 
 <img src="const_error.png">
 
-Had we called `obj->setName("someName")` to C++ that is practically the same thing; The way we can fix this issue is by redefining our `getters`; Currently, they look something like <br>`void getNmae() { return name; }`<br>If we wanted to tell C++ that this function does not change any state on the object is by using `const` on the `function body`, so something like `void getName() const { return name; }`; If we tried this with a `setter`, we would get an error since a `constnt body` cannot change member variables and can instead only change [static fields](#static-fields), [mutable fields](#mutable-fields), values passed through pointers;
+C++ currently doesn't know if our `getter` changes anything or not; The way we can fix this issue is by redefining our `getters`; Currently, they look something like <br>`void getName() { return name; }`<br>We can tell C++ that this function does not change any state on the object by using `const` on the `function body`, so something like `void getName() const { return name; }`; 
+
+If we tried this with a `setter` (`string setName(string val) const { name = val; }`), we would get an error since a `constnt body` function cannot change member variables (reasign their values) and can instead only change [static fields](#static-fields), [mutable fields](#mutable-fields), values passed through pointers;
 
 Our new setters should look like this:
 
