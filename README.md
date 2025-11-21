@@ -5,4 +5,6 @@ I will be writing in english since I don't believe in coding in Serbian :);
 
 The files will be organized into groups by level and I will try to follow the pace of the proffessor;
 
+The guide is done in C++23;
+
 Also, if you want to help, either if u find an error or want to write an example since those are going to take a while, feel free to email me or write an issue :);

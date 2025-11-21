@@ -4,7 +4,7 @@
 
 (note: I am currently unable to make a valid visual representation of pointers so I highly encourage you to find an image online, I will make one when I have the time;)
 
-`Pointers` are variables used for storing addresses - memory locations of other variables or heap allocated values; They themselves are variables, which means they also take some space in memory, how much depends on the system; On a `32-bit` system `pointers` are `32-bits` and on `64-bit` systems they are `64-bits`; Rather self explanitory;
+`Pointers` are variables used for storing addresses - memory locations of other variables or heap allocated values; They themselves are variables, which means they also take some space in memory, how much depends on the system; On a `32-bit` system `pointers` take `32-bits` and on `64-bit` systems they take `64-bits`; Rather self explanitory;
 
 This means that it is **possible**, and often **required** to have `pointers` that point to other `pointers`;
 
@@ -116,6 +116,10 @@ We use `void pointers` when we want to have multiple different value types refer
 
 In the previous example, the output is `353` followed by the letter `a`. **Why?** If we look at the binary representation of the number `353` we can see that it is `0001 0110 0001`, meaning its bigger than `1 byte` and 1 byte is the `size of char`; This means that when we `cast` `vp` to a char pointer, it only took the lower 8 bits of the number, and evaluated them to `97`, which in the ascii table is the value for the letter `a`;
 
+### Null pointer
+
+The `null` pointer is a pointer that points to nothing; We use it denote a pointer whos value is currently unavailable or can't be read; Trying to read a value from a null pointer causes the infamous `null pointer exception` designed to protect our code from undefined behaviour; In C++ we set a pointer to null like so: `int *px = NULL;`; A `null` pointer is basically just `0` but made to pop out when we read the code; This means that we can check if a pointer is **non-null** by doing `if (px)`;
+
 ## References
 
 We've seen `pointers` and the alternate ways we can access the value of a variable, `references` help with the same thing but are much simpler to use (and a lot more restricted);
@@ -193,7 +197,7 @@ This will initialize the array with **5** slots, where the first **3** are `1, 2
 
 Using **zero-based** indexing, we can access every element in the array from the first (at index **0**) to the last (index **(n - 1)**); Getting the size of the array can be done using `sizeof(arr) / sizeof(T)`; `sizeof(arr)` will get the total amount of bytes the array takes, in our case that would be <br>`5 (number of elements) * 4 (size of each element) = 20 (sizeof array)`, meaning that if we divide that by `sizeof(int)` we get **5**;
 
-This is not the only way to make an array, we can also do it with the `new` keyword which will be mentioned in more detail when we come to `classes`; All the `new` keyword does is make the array get **allocated** on the **heap** instead of the **stack** (stack allocation is done like we showed previously); If an array is **stack allocated** it gets `deleted` from the memory **automatically**, while if its **heap allocated** we have to handle deallocation **manually** using the `delete` keyword; Example:
+This is not the only way to make an array, we can also do it with the `new` keyword which will be mentioned in more detail when we come to `classes`; All the `new` keyword does is make the array get **allocated** on the **heap** instead of the **stack** (stack allocation is done like we showed previously); If an array is **stack allocated** it gets `deleted` from the memory **automatically**, while if its **heap allocated** we have to handle deallocation **manually** using the `delete[]` keyword; Example:
 
 ```cpp
 int *arr = new int[5];
@@ -205,11 +209,11 @@ for (int i = 0; i < 5; i++) {
     cout << "The element at index i is: " << arr[i] << endl;
 }
 
-delete arr; // free up memory
+delete[] arr; // free up memory
 
 ```
 
-If we were to change what arr points to, we would lose the reference for the values we **allocated** in **heap**, meaning we can't `delete` them afterwards; This can be devastating and lead to a common bug called a `memory leak` - when **heap allocated** space is not **deallocated** properly; For this reason, whenever we use `new` we should also have a `delete` when we stop using the variable, but more on that in `classes`;
+If we were to change what arr points to, we would lose the reference for the values we **allocated** in **heap**, meaning we can't `delete` them afterwards; This can be devastating and lead to a common bug called a `memory leak` - when **heap allocated** space is not **deallocated** properly; For this reason, whenever we use `new` we should also have a `delete` for single values, or `delete[]` for arrays, but more on that in `classes` (it's also a good practice to set a deleted pointer to `null`);
 
 One last note, since arrays are just fancy pointers under the hood, this means we can also access each of their elements like this:
 

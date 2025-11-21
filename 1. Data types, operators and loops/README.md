@@ -27,7 +27,7 @@ We have:
 
 - `arrays` - continuous blocks of data, you can find more [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references#arrays)
 - `pointers` - special variables that store the address of a certain data type
-- `references` - similar to `pointers` but also very different, explained [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references)
+- `references` - similar to `pointers` but also very different, explained [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/3.%20Pointers%20and%20references#references)
 - `functions` - for reusable code blocks
 - `strings` - part of the standard library (`std::string`) very often used when working with `strings`, compared to the C-style `char[]`
 
@@ -45,6 +45,8 @@ We have:
 
 We use data types to declare variables - named adresses in our program that we can use to fetch data out of memory;
 
+*Output explained [here](https://github.com/UgljesaJovina/learning-cpp/tree/main/2.%20Input%20and%20Output)
+
 ``` cpp
 int main() {
     int age = 20;
@@ -53,7 +55,7 @@ int main() {
 
     cout << age << endl;
     cout << height << endl; 
-    cout << handsomeAndModest << endl; // IO explained in the next folder
+    cout << handsomeAndModest << endl;
 }
 ```
 

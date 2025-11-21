@@ -97,6 +97,18 @@ Like `cout` this isn't the only way to read input from the input stream, but is 
 - `sync()` - clears the input buffer, avoiding issues where characters remain stuck inside it;
 - `ignore(int n)` - same as sync, but will clear only the next `n` characters;
 
+## Escape characters
+
+Escape characters are special characters that tell the program how to format the output, main examples:
+
+- `\n` - inserts a new line in place of the `\n`
+- `\t` - makes a **tab** characters, basically just a bunch of spaces
+- `\\` - writes a `\` character
+- `\"` - write the `"` character
+- `\'` - write the `'` character
+- `\r` - moves the cursor to the begining of the current line, allowing us to change what was already written
+- `\0` - null character; Terminates strings in C and C++
+
 ## Manipulators
 
 Manipulators are like special instructions for the input/output buffers on how they should read/write their data; We have already seen one, the `endl` manipulator; They can be used in function form, getting called as a member function of `cout`, or can be used after the `insertion operator`; Most manipulators are found in the `<iostream>` header, but some are from the `<ios>` and `<iomanip>` headers;
