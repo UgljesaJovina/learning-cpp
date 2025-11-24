@@ -41,21 +41,21 @@ int **ppx = &px;
 The value stored inside *px* now is **the address of** *x*, and the value stored in *ppx* is **the address of** *px*; Hopefully the table below will help you understand better, there is also a script file ***pointers-and-references.cpp*** you can compile and run in order to clear things up;
 
 
-|memory address    |code identifier|value stored at the location|
-|:---:             |:---:          |:---:                       |
-|**0x7ffda9d54b94**|**x**          |**15**                      |
-|**0x7ffda9d54b98**|**px**         |**0x7ffda9d54b94**          |
-|**0x7ffda9d54ba0**|**ppx**        |**0x7ffda9d54b98**          |
+|   memory address   | code identifier | value stored at the location |
+| :----------------: | :-------------: | :--------------------------: |
+| **0x7ffda9d54b94** |      **x**      |            **15**            |
+| **0x7ffda9d54b98** |     **px**      |      **0x7ffda9d54b94**      |
+| **0x7ffda9d54ba0** |     **ppx**     |      **0x7ffda9d54b98**      |
 
 (those with a keen eye may have noticed how the **address** for px is exactly 4 bytes away from the **address** of x, because an int takes 4 byes, and how ppx is 8 bytes away from px because a pointer takes 8 bytes)
 
 Simpler version of the table:
 
-|memory address    |code identifier|value stored at the location|
-|:---:             |:---:          |:---:                       |
-|**A0**            |**x**          |**15**                      |
-|**A1**            |**px**         |**A0**                      |
-|**A2**            |**ppx**        |**A1**                      |
+| memory address | code identifier | value stored at the location |
+| :------------: | :-------------: | :--------------------------: |
+|     **A0**     |      **x**      |            **15**            |
+|     **A1**     |     **px**      |            **A0**            |
+|     **A2**     |     **ppx**     |            **A1**            |
 
 So far this seems very point<sub>(er)</sub>less, because we still haven't covered functions and the `*` operator; 
 
@@ -118,7 +118,7 @@ In the previous example, the output is `353` followed by the letter `a`. **Why?*
 
 ### Null pointer
 
-The `null` pointer is a pointer that points to nothing; We use it denote a pointer whos value is currently unavailable or can't be read; Trying to read a value from a null pointer causes the infamous `null pointer exception` designed to protect our code from undefined behaviour; In C++ we set a pointer to null like so: `int *px = NULL;`; A `null` pointer is basically just `0` but made to pop out when we read the code; This means that we can check if a pointer is **non-null** by doing `if (px)`;
+The `null` pointer is a pointer that points to nothing; We use it denote a pointer whos value is currently unavailable or can't be read; Trying to read a value from a null pointer causes the infamous `null pointer exception` designed to protect our code from undefined behaviour; In C++ we set a pointer to null like so: `int *px = nullptr;`; A `null` pointer is basically just `0` (it technically has its own type, `std::nullptr_t`) but made to pop out when we read the code; This means that we can check if a pointer is **non-null** by doing `if (px)`;
 
 ## References
 
@@ -163,9 +163,9 @@ rb = b2; // puts the value of b2 into b1 (b1 becomes 15)
 If we come back to the table we made for the pointers, we can see how references behave:
 
 
-|memory address    |code identifier|value stored at the location|
-|:---:             |:---:          |:---:                       |
-|**0x7ffda9d54b94**|**x, rx, rrx** |**67**                      |
+|   memory address   | code identifier | value stored at the location |
+| :----------------: | :-------------: | :--------------------------: |
+| **0x7ffda9d54b94** | **x, rx, rrx**  |            **67**            |
 
 We just made new identifiers for the same object in memory, compared to making new objects in memory;
 
@@ -186,14 +186,14 @@ int val = 15;
 
 This will initialize the array with **5** slots, where the first **3** are `1, 2, 3` and the last **2** are `0`;
 
-|memory address    |code identifier|value stored at the location|
-|:---:             |:---:          |:---:                       |
-|**A0 + 0**        |**arr[0]**     |**1**                       |
-|**A0 + 4**        |**arr[1]**     |**2**                       |
-|**A0 + 8**        |**arr[2]**     |**3**                       |
-|**A0 + 12**       |**arr[3]**     |**0**                       |
-|**A0 + 16**       |**arr[4]**     |**0**                       |
-|**A1**            |**val**        |**15**                      |
+| memory address | code identifier | value stored at the location |
+| :------------: | :-------------: | :--------------------------: |
+|   **A0 + 0**   |   **arr[0]**    |            **1**             |
+|   **A0 + 4**   |   **arr[1]**    |            **2**             |
+|   **A0 + 8**   |   **arr[2]**    |            **3**             |
+|  **A0 + 12**   |   **arr[3]**    |            **0**             |
+|  **A0 + 16**   |   **arr[4]**    |            **0**             |
+|     **A1**     |     **val**     |            **15**            |
 
 Using **zero-based** indexing, we can access every element in the array from the first (at index **0**) to the last (index **(n - 1)**); Getting the size of the array can be done using `sizeof(arr) / sizeof(T)`; `sizeof(arr)` will get the total amount of bytes the array takes, in our case that would be <br>`5 (number of elements) * 4 (size of each element) = 20 (sizeof array)`, meaning that if we divide that by `sizeof(int)` we get **5**;
 

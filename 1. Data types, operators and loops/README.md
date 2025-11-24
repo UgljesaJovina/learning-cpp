@@ -123,7 +123,7 @@ int y = x < 20 ? x : 20; // y will be 15 in this case since we're working with s
 There are only two operators (I can mention right now at least) in this group, and they are the `sizeof` and the `casting` operators;
 
 - `sizeof` - outputs the size in bytes of some **type** or **variable**, used like: `sizeof(type)` or `sizeof(var_name)`; It looks like a function call, but it is not since it gets processed during compile time and just swapped for a static value that represents the size calculated;
-- `(type)` - the casting operator is really useful especially after we get to the whole OOP part; It is a unary operator used like `(type)var_name`; It converts a variable into a different type **IF POSSIBLE**, otherwise throws an exception; The variable that was used stays the same, but the output will be of the desired type; Example:
+- `(type)var` - the casting operator is really useful especially after we get to the whole OOP part; It is a unary operator used like `(type)var_name`; It converts a variable into a different type **IF POSSIBLE**, otherwise throws an exception; The variable that was used stays the same, but the output will be of the desired type; Example:
 ```cpp
 char c = 'U';
 int cValue = (int)c; // 85
@@ -139,17 +139,18 @@ int cValue = (int)c; // 85
 if (condition1) {
     // execute if condition1 is non-zero
 } else if (condition2) {
-    // execute if condition2 is non-zero
+    // execute if condition2 is non-zero, and all the previous were 0
 } else {
-    // execute if both condition1 and condition2 are 0
+    // execute if all other conditions were zero
 }
 ```
 
-As we can see, the `if-else` block is made with the if keyword at the begining, a pair of **parenthesies** containing a boolean value, and a pair of **curly braces** containing the block of code that is to be executed if the boolean value evaluates to `true` (note that if the block containes only one line of code, the curly braces don't need to be written); 
+As we can see, the `if-else` block is made with the if keyword at the begining, a pair of **parenthesies** containing a boolean value, and a pair of **curly braces** containing the block of code that is to be executed if the boolean value evaluates to `true` (note that if the block contains only one line of code, the curly braces don't need to be written); 
 
-The `if` block can exist by itself, executing if the condition is met; In order to have more complex conditions we can attach an infinite amount of `if-else` blocks (yandere-dev) and one `else` block; The statements get checked sequentially and when a `true` value is found, that block gets executed and that if statement is finished;
+The `if` block can exist by itself, executing if the condition is met; In order to have more complex conditions we can attach an infinite amount of `else-if` blocks (yandere-dev) and one `else` block; The statements get checked **sequentially** and when a `non-zero` value is found, that block gets executed and that `if-chain` statement is finished;
 
 Example:
+
 ```cpp
 int age = 70;
 
@@ -165,13 +166,14 @@ Here, since the less specific check was first, we can never reach the `else if (
 Correct way:
 
 ```cpp
-float grade = 4.7;
+float grade = 2.7;
 
 if (grade >= 4.5) cout << "A" << endl;
 else if (grade >= 3.5) cout << "B" << endl;
 else if (grade >= 2.5) cout << "C" << endl;
 else if (grade >= 1.5) cout << "D" << endl;
 else cout << "F" << endl;
+// outputs 'C'
 ```
 
 - The other way to do conditional (kinda) logic is to use a `switch-case` tree; Syntax example:
@@ -184,9 +186,7 @@ switch (variable) {
     case val2:
         // code block...
         break;
-    .
-    .
-    .
+    ...
     case valn:
         // code block...
         break;
@@ -196,7 +196,7 @@ switch (variable) {
 }
 ```
 
-`Switch` is a lot more restrictive compared to `if` since each case can match only by `==`; A case can be entered if `vairable == valx` and has to end with a break in order to denote it's own code block; The `default` block is similar to the `else` block since it is executed only if all else fails;
+`Switch` is a lot more restrictive compared to `if` since each case can match only by `==`; A case can be entered if `vairable == valx` and has to end with a `break` in order to denote it's own code block; The `default` block is similar to the `else` block since it is executed only if all else fails;
 
 ### Loops
 
@@ -286,3 +286,32 @@ for (int n = 10, i = 0; i < n; cout << i << endl, i++) { }
 ```
 
 This will write numbers `from 0 to 9` without us having put anything in the body of the `for loop`;
+
+#### Break and continue
+
+`Break` and `continue` are keywords used for manipulating the order in which loops get executed; If we hit a `break`, the loop immediately stops, stopping the current iteration and not starting a new one; For example:
+
+```cpp
+// we want to read user input until they enter "0"
+
+int a = -1;
+while (true) { // always non-zero => infinite loop
+    cout << "Enter a value" << endl;
+    cin >> a;
+
+    if (a == 0) break;
+}
+```
+
+Our infinite loop will only stop when the user enters a zero;
+
+`continue` works simillarly, but also very differently; When the loop hits a `continue` block, it skips the current iteration (executing the third clause in a for loop) and immediately goes back to the start of the loop; For example:
+
+```cpp
+for (int i = 0; i < 10; i++) {
+    if (i == 6 || i == 7) continue;
+    cout << i << endl;
+}
+```
+
+Here the loop will write all numbers `0-9`, except for `6` and `7`, because we finish their iteration before they can get to `cout`

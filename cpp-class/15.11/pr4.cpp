@@ -66,7 +66,7 @@ int main() {
 
     int *arr = new int[n];
     
-    if (arr == NULL) {
+    if (arr == nullptr) {
         cout << "Alokacija neuspela" << endl;
         return 1;
     }
