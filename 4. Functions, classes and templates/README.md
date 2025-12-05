@@ -643,10 +643,10 @@ We can see that `name` has the same address as the object `d1` itself; This is t
 | **0x7fff696bf96b** |      **//**       |            **??**            |
 | **0x7fff696bf970** | **&d1.furColour** |         **WHITE(6)**         |
 | **0x7fff696bf974** | **&d1.eyeColour** |         **BLACK(4)**         |
-| **0x7fff696bf978** |  **&d1.height**   |            **0**             |
-| **0x7fff696bf97b** |      **//**       |           **110**            |
-| **0x7fff696bf980** |  **&d1.weight**   |            **0**             |
-| **0x7fff696bf984** |      **//**       |            **50**            |
+| **0x7fff696bf978** |  **&d1.height**   |           **110**            |
+| **0x7fff696bf97b** |      **//**       |            **0**             |
+| **0x7fff696bf980** |  **&d1.weight**   |            **50**            |
+| **0x7fff696bf984** |      **//**       |            **0**             |
 
 Or:
 

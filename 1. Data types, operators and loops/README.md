@@ -18,6 +18,7 @@ These are the same as in C, we have:
 - `unsigned` - a modifier used on previous **data types** in order to make them **positive-only**, used by itself is the same as `unsigned int`
 - `bool` - for `true`/`false` values, this is the first difference compared to C, since in C bool didn't exist as an explicit **data type**
 - `void` - for when the value is uncertain (could be anything, could be nothing, used mainly for `pointers` and function as a return type)
+- `enum` - has it's own [section](#enums)
 
 \* `long int` and `int` depend on system structure, for example, on windows `long int` will be `32-bit` for compatability reasons, while on linux it will be `64-bit`; Mostly unimportant information :) (if you want to check the size of some variable, there is a builtin operator `typeof(*type*)` that can help you)
 
@@ -106,7 +107,7 @@ I'm not sure if this is in the scope of the class, but I think they're important
 - `^` - binary xor, only the bits present **explicitly** in either of the operands, not both, not none, will be present; Ex.: `5 ^ 3 == 6`
 - `<<` - left shift operator shifts the bits of the left operand by the amount given as the right, effectively multiplying it by a power of two; `x << y <=> x * 2^y`; Ex.: `5 << 1 == 10`, `5 << 4 == 80`
 - `>>` - right shift operator works very similarly, but instead of multiplying we divide the number by a power of two; Ex.: `64 >> 4 == 4`, `25 >> 2 == 6`, the rightmost bits have been pushed out
-- `~` - one's complement, or the binary not is a unary operand that inverts every bit of the number; Ex.: `~5 == -6`, `~17 == -18`; This happens because when fliping every bit in the number, we also flip the first bit which decides the sign of the number (will it be positive - `0`, or negative - `1`); Had for example the `5` been an unsigned number, we would have gotten `4294967290`;
+- `~` - one's complement, or the `binary not`, is a unary operand that inverts every bit of the number; Ex.: `~5 == -6`, `~17 == -18`; This happens because when fliping every bit in the number, we also flip the first bit which decides the sign of the number (will it be positive - `0`, or negative - `1`); Had for example the `5` been an unsigned number, we would have gotten `4294967290`;
 
 ### Ternary operator
 
@@ -314,4 +315,149 @@ for (int i = 0; i < 10; i++) {
 }
 ```
 
-Here the loop will write all numbers `0-9`, except for `6` and `7`, because we finish their iteration before they can get to `cout`
+Here the loop will write all numbers `0-9`, except for `6` and `7`, because we finish their iteration before they can get to `cout`;
+
+### Enums
+
+Enums synthetic sugar for regular whole numbers; We often run into a problem while programing where we need a value to contain the current state of some object, for example, a **traffic light**; A traffic light has 3 states, `RED`, `YELLOW` and `GREEN`; We need a way to distinguish between these, so lets say we make an int to hold the current state of the traffic light;
+
+```cpp
+int trafficLightState = 0; // this means red
+trafficLightState = 1; // just yellow
+trafficLightState = 2; // green
+```
+This is a convention we would have to follow for the entire program, and not just we, but anyone working with us on the same project; This is not only `error-prone` but also impossible to maintain; This is why the programming gods gave us `enums`; We can define one like so:
+
+```cpp
+enum TrafficLightState {
+    RED, YELLOW, GREEN
+}; // note the ; at the end
+```
+
+After we define the enum, we can make a variable of its type:
+
+```cpp
+int main() {
+    TrafficLightState currentState = YELLOW;
+    cout << currentState;
+}
+```
+
+This will print out `1`, because an enum is just a name that will get replaced by a number; When the compiler looks at our code, wherever it sees `YELLOW`, it is gonna replace it with `1`, `GREEN` => `2` and so on;
+
+What if we want to have custom values on our `enum` members? We would need to define it in the enum's definition:
+
+```cpp
+enum TrafficLightState {
+    RED, YELLOW = 5, GREEN
+};
+```
+
+Now, `RED` is `0` (has the default value), `YELLOW` is `5` and `GREEN` is `6`, since any undefined value will just increment itself based on the previous value; This means that if we do:
+
+```cpp
+enum TrafficLightState {
+    RED = 1, YELLOW = 0, GREEN
+};
+```
+
+This will make `GREEN` and `RED` have the same value `1`, which is `not particullarly useful`;
+
+By default, an enum is just a `4 byte` integer number, but we can change it when defining the enum:
+
+```cpp
+enum E1 : char {
+    VAL1, VAL2
+}
+
+enum E2 : short {
+    VAL3, VAL4 
+}
+
+enum E3 : long {
+    VAL5, VAL6
+}
+```
+
+The size of `E1` now is `1 byte`, `E2` is `2 bytes` and the size of `E3` is `8 bytes`;
+
+#### Enums as flags
+
+***!!!Rather advanced!!!***
+
+So we know that enums are just numbers under the hood, and those numbers are made up of bits; Now, what if we wanted to define an array of properties that an object can have; I'll use `Linux's file system` as an example;
+
+On linux, each user has some level of access to each file on the system; Those levels of access are: `read`, `write` and `execute`; We could model it like so:
+
+```cpp
+class File {
+    bool canRead = false;
+    bool canWrite = false;
+    bool canExecute = false;
+};
+```
+
+And while this works, what happens if we have `30` of these `flags` that an object can have; Not only would we have to make even more variables, but we would also need to keep track of them (technically, an array works fine, but then we have magic numbers that we need to use for indexing the array in oreder to get the value of each flag); Not only is this tedious, but it takes much more space than needed; Each flag can either be `set` or `not set`, but each bool has to be `1 byte` meaning `256` different values instead of just `2`;
+
+In order to get around this limitation, we can use a `flags enum`, a special kind of enum in which every single value is a power of two; So for our example we could have:
+
+```cpp
+enum FilePermissions {
+    EXECUTE = 1, WRITE = 2, READ = 4
+};
+
+class File {
+    FilePermissions permissions;
+};
+```
+
+Now we have a single variable holding all the permissions for our specific user, but how can we access them? Using bit operations, we can check if a user has some privilege, or give/remove the privilege if needed; For example, let's make a couple of functions inside our `File` class:
+
+```cpp
+class File {
+    string path;
+    FilePermissions permissions;
+public:
+    string Read() {
+        if (permissions & READ == 0) {
+            cout << "You do not have required permissions";
+            throw Exception;
+        }
+        // ... reading logic ...
+    }
+
+
+    void Write(string newContent) {
+        if (permissions & WRITE == 0) {
+            cout << "You do not have required permissions";
+            throw Exception;
+        } 
+        // ... writing logic ...
+    }
+
+    void Execute() {
+        if (permissions & EXECUTE == 0) {
+            cout << "You do not have required permissions";
+            throw Exception;
+        } 
+        // ... executing logic ...
+    }
+};
+```
+
+Here, we use the `binary and` (`&`) operator to check if some permissions exists in the permissions field; If the permission we need is there, the returned value will be `non-zero` (same as the value from our enum);
+
+What if we want to grant a specific permissions, or remove it?
+
+```cpp
+    void AddPermission(FilePermissions perms) {
+        permissions |= perms;
+    }
+    
+
+    void RemovePermission(FilePermissions perms) {
+        permissions &= ~perms;
+    }
+```
+
+Tbh, I'm not sure how to write a coherent explanation for this part, I suggest you just write it down on a paper and try it for yourself if you're interested;

@@ -224,6 +224,8 @@ int *arr = new int[5] { 1, 2, 3, 4, 5 };
 // array now looks like: 1, 2, 17, 4, 5
 
 cout << *(arr + 4) << endl; // writes 5
+
+delete[] arr;
 ```
 
 This works because `arr[i]` is just a different way to write the *"pointerized"* expression; `*(arr + 4)` works because it knows the pointer is of type `int`, meaning it is going to add `4 * sizeof(int)` to the base pointer `arr`; Had we dont something like: `*(int*)((char*)arr + 4)`, it would read out `2` - the second index in the array; Why? `(char*)arr` will cast arr to a `char pointer`, meaning that adding 4 will add `4 * sizeof(char) = 4` to the address, skiping only one integer; If we were to write this out, we wouldn't see anything since the ascii character with the value `2` doesn't have a visual representation; If instead of `2` we had `48`, output would be `0`; For this reason, before **dereferencing** the pointer, we have to cast it back to `(int*)` so it gets treated like a number, which will then write out `2`; If we were to do `*(int*)((char*)arr + 3)`, we would get `512`, because the value of `2` gets `shifted` by 8 places to the left, meaning it gets multiplied by `2^8 = 256`; Example showing everything I've yapped about here:
@@ -235,4 +237,6 @@ cout << *(arr + 4) << endl; // 5
 cout << ((char*)arr + 4) << endl; // 0
 cout << *(int*)((char*)arr + 4) << endl; // 48
 cout << *(int*)((char*)arr + 7) << endl; // 768
+
+delete[] arr;
 ```

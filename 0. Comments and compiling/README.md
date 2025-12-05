@@ -33,7 +33,7 @@ C++ is a compiled language, meaning we need to turn it into an executable before
 g++ *file-name*
 ```
 
-This produces a file named `a;out` that is ready to be executed; If you want to change the name, you can use the `-o` flag, example:
+This produces a file named `a.out` that is ready to be executed; If you want to change the name, you can use the `-o` flag, example:
 
 ```
 g++ *script-file* -o *desired-output-file-name*
